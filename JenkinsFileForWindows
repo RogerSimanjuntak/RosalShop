@@ -1,0 +1,40 @@
+pipeline{
+	agent any
+	stages {
+	    stage('Git') {
+			steps {
+			    dir('c:/project/RosalShop/'){
+			     bat 'git status'
+			     bat 'git pull https://github.com/RogerSimanjuntak/Rosaliashop.git development'
+			     bat 'git branch'
+			     bat 'git push https://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@github.com/RogerSimanjuntak/RosalShop.git'
+			     bat 'git log'
+			    }
+				
+			}
+		}
+		stage('Docker Build'){
+		    steps{
+		        dir('c:/project/RosalShop/'){
+		        bat 'docker build -t ngabroger/websiteproject:latest .'
+		        }
+		    }
+		    
+		}
+		stage('Docker Login'){
+		    steps{
+		        dir('c:/project/RosalShop/'){
+		        bat 'docker login -u ngabroger -p dckr_pat_nMQHnsf1vaamiaDcojGVAKaSbZw'
+		        }
+		    }
+		}
+        stage('Docker Push'){
+	    steps{
+	        dir('c:/project/RosalShop/'){
+	        bat 'docker push ngabroger/websiteproject:latest'
+	        }
+	    }
+	   }
+	}
+	
+}
